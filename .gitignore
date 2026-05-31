@@ -8,3 +8,31 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+.cache/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated outputs
+notebooks/cache/
+notebooks/reports/
