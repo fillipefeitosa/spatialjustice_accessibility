@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 # TODO: function to download network by name
 
 
-def get_bbox_wgs84(gdf: gpd.GeoDataFrame) -> tuple:
+def get_bbox_wgs84(gdf: gpd.GeoDataFrame):
     """
     Converts the GeoDataFrame extent to WGS84 and returns
     the bounding box as (west, south, east, north).
@@ -25,12 +25,11 @@ def get_bbox_wgs84(gdf: gpd.GeoDataFrame) -> tuple:
         (west, south, east, north) in decimal degrees
     """
     gdf_wgs84 = gdf.to_crs(epsg=4326)
-    west, south, east, north = gdf_wgs84.total_bounds
-    logger.info(f"Bounding box — W:{west:.4f} S:{south:.4f} E:{east:.4f} N:{north:.4f}")
-    return west, south, east, north
+    bbox = gdf_wgs84.total_bounds
+    return bbox
 
 
-def download_network(bbox: tuple, network_type: str = "walk"):
+def download_network():
     """
     Downloads the OSM street network for the bounding box.
 
@@ -42,11 +41,8 @@ def download_network(bbox: tuple, network_type: str = "walk"):
         osmnx MultiDiGraph
     """
     print(f"Downloading OSM {network_type} network...")
-    graph = ox.graph_from_bbox(bbox, network_type=network_type)
-    logger.info(
-        "Network ready — %s nodes, %s edges", len(graph.nodes), len(graph.edges)
-    )
-    return graph
+
+    return 0
 
 
 def build_pandana_network(graph) -> pandana.Network:
@@ -66,13 +62,6 @@ def build_pandana_network(graph) -> pandana.Network:
     edge_to = pd.Series(edges.index.get_level_values("v").values)
     edge_weights = pd.DataFrame({"distance": edges["length"].values})
 
-    network = pandana.Network(
-        node_x=nodes["x"],
-        node_y=nodes["y"],
-        edge_from=edge_from,
-        edge_to=edge_to,
-        edge_weights=edge_weights,
-        twoway=False,
-    )
+    network = pandana.Network()
     logging.info("Pandana network ready — %s nodes", len(nodes))
     return network
